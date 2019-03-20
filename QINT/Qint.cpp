@@ -1,7 +1,7 @@
 #include "Qint.h"
 #include "Helper.h"
 
-void Qint::setBitOfArrBit(int bitIndex) {
+void Qint::setBitOfArrBit(int* arrBit, int bitIndex) {
 	int arrIndex = bitIndex / 32;
 	int index = bitIndex % 32;
 
@@ -18,7 +18,7 @@ void Qint::setBitOfArrBit(int bitIndex) {
 }
 
 Qint::Qint(string numberString, int base) {
-	//arrBit = new int[4];
+	arrBit = new int[4]{0, 0, 0, 0};
 	int bitIndex = 1; //128 bits: from 1 to 128
 
 	Hex_Bin['0'] = "0000";
@@ -42,7 +42,7 @@ Qint::Qint(string numberString, int base) {
 	if (base == 2) {
 		for (int i = numberString.size() - 1; i >= 0; i--) {
 			if (numberString[i] == '1')
-				setBitOfArrBit(bitIndex);
+				setBitOfArrBit(arrBit, bitIndex);
 
 			bitIndex++;
 		}
@@ -56,7 +56,7 @@ Qint::Qint(string numberString, int base) {
 			
 			for (int j = binaryString.size() - 1; j >= 0; j--) {
 				if (binaryString[j] == '1')
-					setBitOfArrBit(bitIndex);
+					setBitOfArrBit(arrBit, bitIndex);
 
 				bitIndex++;
 			}
@@ -69,7 +69,6 @@ Qint::Qint(string numberString, int base) {
 		string p = numberString;
 		string q = "";
 		int divisor = 2;
-		int bitIndex = 0;
 
 		while (p != "1")
 		{
@@ -86,13 +85,15 @@ Qint::Qint(string numberString, int base) {
 			}
 
 			if ((p[p.size() - 1] - 48) % 2 != 0)
-				setBitOfArrBit(bitIndex);
+				setBitOfArrBit(arrBit, bitIndex);
 
 			p = q;
 			q = "";
 			bitIndex++;
 		}	
 
-		setBitOfArrBit(bitIndex);
+		setBitOfArrBit(arrBit, bitIndex);
+
+		return;
 	}
 }

@@ -41,9 +41,15 @@
     <ClCompile Include="Helper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Task.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="input.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="output.txt">
       <Filter>Source Files</Filter>
     </Text>
   </ItemGroup>

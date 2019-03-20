@@ -95,10 +95,12 @@ void Application::Start(const char* inputFile, const char* outputFile) {
 					if (Operators[i] == "~") {
 						Qint num(data.substr(found + 2, data.size() - 2), currBase);
 						Qint res = Processing_Calculate(num, Operators[i], 0);
+						Processing_Convert(res, currBase);
 					}
 					else {
 						Qint num(data.substr(found + 4, data.size() - 4), currBase);
 						Qint res = Processing_Calculate(num, Operators[i], 0);
+						Processing_Convert(res, currBase);
 					}
 				}
 				else {
@@ -110,11 +112,13 @@ void Application::Start(const char* inputFile, const char* outputFile) {
 						stream >> amountBit;
 
 						Qint res = Processing_Calculate(num, Operators[i], amountBit);
+						Processing_Convert(res, currBase);
 					}
 					else {
 						Qint numA(data.substr(0, found - 1), currBase);
 						Qint numB(data.substr(found + 2, data.size() - found - 2), currBase);
 						Qint res = Processing_Calculate(numA, numB, Operators[i]);
+						Processing_Convert(res, currBase);
 					}
 				}
 
