@@ -6,7 +6,14 @@ using namespace std;
 /*
 	Status: Complete
 */
-void Task::Convert_Qint_to_Binary(Qint num) {
+void Task::Convert_Qint_to_Binary(Qint num, bool secondOffsetNumberMode) {
+
+	if (secondOffsetNumberMode) {
+		num = Task::Not(num);
+		Qint tmp("1", 2);
+		num = Task::Add(num, tmp);
+	}
+
 	int* arrBit = num.getArrayBit();
 	string res = "";
 
@@ -117,7 +124,10 @@ Qint Task::Add(Qint numA, Qint numB) {
 	Status: Incomplete
 */
 Qint Task::Subtract(Qint numA, Qint numB) {
-	return numA;
+	Qint tmp("1", 2);
+	numB = Task::Add(Task::Not(numB), tmp);
+	
+	return Task::Add(numA, numB);
 }
 
 /*
@@ -138,6 +148,15 @@ Qint Task::Divide(Qint numA, Qint numB) {
 	Status: Incomplete
 */
 Qint Task::And(Qint numA, Qint numB) {
+	int* arrBit_A = numA.getArrayBit();
+	int* arrBit_B = numB.getArrayBit();
+	int* res = new int[4]{ 0, 0, 0, 0 };
+
+	for (int i = 3; i >= 0; i--) {
+		res[i] = arrBit_A[i] & arrBit_B[i];
+	}
+
+	numA.setArrayBit(res);
 	return numA;
 }
 

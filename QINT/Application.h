@@ -34,7 +34,7 @@ class Application {
 			Results:
 				Write the number after converting to targetBase into outpuFile
 		*/
-		void Processing_Convert(Qint num, int targetBase);
+		void Processing_Convert(Qint num, int targetBase, bool secondOffsetNumberMode);
 
 	public:
 		/*

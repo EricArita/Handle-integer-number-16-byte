@@ -56,11 +56,11 @@ Qint Application::Processing_Calculate(Qint num, string operatorType, int moveBi
 		return Task::ROR(num);
 }
 
-void Application::Processing_Convert(Qint num, int targetBase) {
+void Application::Processing_Convert(Qint num, int targetBase, bool secondOffsetNumberMode) {
 	switch (targetBase)
 	{
 		case 2:
-			Task::Convert_Qint_to_Binary(num);
+			Task::Convert_Qint_to_Binary(num, secondOffsetNumberMode);
 			break;
 		case 10:
 			Task::Convert_Qint_to_Decimal(num);
@@ -96,12 +96,12 @@ void Application::Start(const char* inputFile, const char* outputFile) {
 					if (Operators[i] == "~") {
 						Qint num(data.substr(found + 2, data.size() - 2), currBase);
 						Qint res = Processing_Calculate(num, Operators[i], 0);
-						Processing_Convert(res, currBase);
+						Processing_Convert(res, currBase, false);
 					}
 					else {
 						Qint num(data.substr(found + 4, data.size() - 4), currBase);
 						Qint res = Processing_Calculate(num, Operators[i], 0);
-						Processing_Convert(res, currBase);
+						Processing_Convert(res, currBase, false);
 					}
 				}
 				else {
@@ -113,13 +113,13 @@ void Application::Start(const char* inputFile, const char* outputFile) {
 						stream >> amountBit;
 
 						Qint res = Processing_Calculate(num, Operators[i], amountBit);
-						Processing_Convert(res, currBase);
+						Processing_Convert(res, currBase, false);
 					}
 					else {
 						Qint numA(data.substr(0, found - 1), currBase);
 						Qint numB(data.substr(found + 2, data.size() - found - 2), currBase);
 						Qint res = Processing_Calculate(numA, numB, Operators[i]);
-						Processing_Convert(res, currBase);
+						Processing_Convert(res, currBase, false);
 					}
 				}
 
@@ -132,16 +132,16 @@ void Application::Start(const char* inputFile, const char* outputFile) {
 						
 		if (data[0] == '2') {
 			Qint num(data.substr(2, data.size() - 2), currBase);
-			Processing_Convert(num, 2);
+			Processing_Convert(num, 2, true);
 		}
 		else {
 			if (data[1] == '6') {
 				Qint num(data.substr(3, data.size() - 3), currBase);
-				Processing_Convert(num, 16);
+				Processing_Convert(num, 16, false);
 			}					
 			else {
 				Qint num(data.substr(3, data.size() - 3), currBase);
-				Processing_Convert(num, 10);
+				Processing_Convert(num, 10, false);
 			}					
 		}						
 	}

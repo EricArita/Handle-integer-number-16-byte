@@ -6,7 +6,7 @@
 */
 class Task {
 	public:
-		static void Convert_Qint_to_Binary(Qint num);
+		static void Convert_Qint_to_Binary(Qint num,bool secondOffsetNumberMode);
 
 		static void Convert_Qint_to_Decimal(Qint num);
 
