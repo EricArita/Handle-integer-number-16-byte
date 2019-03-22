@@ -28,7 +28,10 @@ void Task::Convert_Qint_to_Binary(Qint num, bool secondOffsetNumberMode) {
 
 	while (res[0] == '0') res.erase(0, 1);
 
-	cout << res << endl;
+	if (res.empty())
+		cout << 0;
+	else
+		cout << res << endl;
 }
 
 /*
@@ -76,9 +79,64 @@ void Task::Convert_Qint_to_Hexadecimal(Qint num) {
 }
 
 /*
-	Status: Incomplete
+	Status: Complete
 */
 void Task::Convert_Qint_to_Decimal(Qint num) {
+	int* arrBit = num.getArrayBit();
+	bool bit = Bit::getBit(arrBit[0], 31);
+
+	if (bit == 1)
+		num = Task::Not(Task::Subtract(num, Qint("1", 2)));
+
+	arrBit = num.getArrayBit();
+	string bitString = "";
+
+	for (int i = 3; i >= 0; i--)
+		for (int j = 0; j < 32; j++)
+			bitString = char(Bit::getBit(arrBit[i], j) + 48) + bitString;
+	
+	while (bitString[0] == '0') bitString.erase(0, 1);
+
+	int res[50] = {0};
+
+	while (!bitString.empty()) {
+		for (int i = 0; i < 50; i++) {
+			if (res[i] >= 5) {
+				res[i] += 3;
+			}
+		}
+		
+		for (int i = 0; i < 50; i++) {
+			res[i] = Bit::turnOffBit(res[i], 3) << 1;
+
+			if (i == 49) {
+				if (bitString[0] == '1')
+					res[i] = Bit::turnOnBit(res[i], 0);
+			}
+			else {
+				if (Bit::getBit(res[i+1], 3) == 1)
+					res[i] = Bit::turnOnBit(res[i], 0);	
+			}
+		}
+			
+		bitString.erase(0, 1);
+	}
+
+	for (int i = 0; i < 50; i++)
+		bitString += char(res[i] + 48);
+
+	while (bitString[0] == '0') 
+		bitString.erase(0, 1);
+
+	if (bitString.empty()) {
+		cout << 0 << endl;
+		return;
+	}
+
+	if (bit == 1)
+		bitString = '-' + bitString;
+	
+	cout << bitString << endl;
 }
 
 /*
@@ -121,7 +179,7 @@ Qint Task::Add(Qint numA, Qint numB) {
 }
 
 /*
-	Status: Incomplete
+	Status: Complete
 */
 Qint Task::Subtract(Qint numA, Qint numB) {
 	Qint tmp("1", 2);
@@ -145,7 +203,7 @@ Qint Task::Divide(Qint numA, Qint numB) {
 }
 
 /*
-	Status: Incomplete
+	Status: Complete
 */
 Qint Task::And(Qint numA, Qint numB) {
 	int* arrBit_A = numA.getArrayBit();
@@ -161,31 +219,99 @@ Qint Task::And(Qint numA, Qint numB) {
 }
 
 /*
-	Status: Incomplete
+	Status: Complete
 */
 Qint Task::Or(Qint numA, Qint numB) {
+	int* arrBit_A = numA.getArrayBit();
+	int* arrBit_B = numB.getArrayBit();
+	int* res = new int[4]{ 0, 0, 0, 0 };
+
+	for (int i = 3; i >= 0; i--) {
+		res[i] = arrBit_A[i] | arrBit_B[i];
+	}
+
+	numA.setArrayBit(res);
 	return numA;
 }
 
 /*
-	Status: Incomplete
+	Status: Complete
 */
 Qint Task::Xor(Qint numA, Qint numB) {
+	int* arrBit_A = numA.getArrayBit();
+	int* arrBit_B = numB.getArrayBit();
+	int* res = new int[4]{ 0, 0, 0, 0 };
+
+	for (int i = 3; i >= 0; i--) {
+		res[i] = arrBit_A[i] ^ arrBit_B[i];
+	}
+
+	numA.setArrayBit(res);
 	return numA;
 }
 
 /*
-	Status: Incomplete
+	Status: Complete
 */
-Qint Task::SHL(Qint numA, int k) {
-	return numA;
+Qint Task::SHL(Qint num, int k) {
+	int* arrBit = num.getArrayBit();
+
+	for (int i = 0; i <= 3; i++) {
+		for (int j = 31; j >= 0; j--) {
+			if (j - k >= 0) {
+				arrBit[i] = Bit::setBit(arrBit[i], j, Bit::getBit(arrBit[i], j - k));
+			}
+			else {
+				int bitIndex = k % 32 == 0 ? (j - k + 32 * (k / 32)) : (j - k + 32 * (k / 32 + 1));
+				int arrIndex = i + (k / 32);
+				arrIndex = (k % 32) > j ? arrIndex + 1 : arrIndex;
+
+				if (arrIndex <= 3) {
+					arrBit[i] = Bit::setBit(arrBit[i], j, Bit::getBit(arrBit[arrIndex], bitIndex));
+				}
+				else {
+					arrBit[i] = Bit::setBit(arrBit[i], j, 0);
+				}
+			}
+		}
+	}
+
+	num.setArrayBit(arrBit);
+	return num;
 }
 
 /*
-	Status: Incomplete
+	Status: Complete
 */
-Qint Task::SHR(Qint numA, int k) {
-	return numA;
+Qint Task::SHR(Qint num, int k) {
+	int* arrBit = num.getArrayBit();
+	int highestBit = Bit::getBit(arrBit[0], 31);
+
+	for (int i = 3; i >= 0; i--) {
+		for (int j = 0; j <= 31; j++) {
+			if (j + k <= 31) {
+				arrBit[i] = Bit::setBit(arrBit[i], j, Bit::getBit(arrBit[i], j + k));
+			}
+			else {
+				int bitIndex = k / 32 == 0 ? k + j - 32 : j + (k % 32);
+				int arrIndex = i - (k / 32);
+				arrIndex = (k % 32) > (31 - j) ? arrIndex - 1 : arrIndex;
+
+				if (arrIndex >= 0) {
+					arrBit[i] = Bit::setBit(arrBit[i], j, Bit::getBit(arrBit[arrIndex], bitIndex));
+				}
+				else {
+					arrBit[i] = Bit::setBit(arrBit[i], j, 0);
+				}
+			}
+		}
+	}
+
+	if (highestBit == 1)
+		Bit::turnOnBit(arrBit[0], 31);
+
+	num.setArrayBit(arrBit);
+	return num;
 }
 
 /*

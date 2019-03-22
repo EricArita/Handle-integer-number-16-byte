@@ -13,7 +13,14 @@ class Bit{
 		//
 		static int turnOffBit(int num, int bitIndex);
 
+		//
 		//get the value of bit at bitIndex position of num
-		static int getBit(int num, int bitIndex);
+		//
+		static bool getBit(int num, int bitIndex);
+
+		//
+		//Set value to the bit at bitIndex possition of num 
+		//
+		static int setBit(int num, int bitIndex, bool value);
 };
 

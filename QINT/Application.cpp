@@ -85,7 +85,7 @@ void Application::Start(const char* inputFile, const char* outputFile) {
 		getline(cin, data);
 
 		while (data[0] == ' ') data.erase(0, 1);
-		while (data[data.size() - 1] == ' ') data.erase(data[data.size() - 1], 1);
+		while (data[data.size() - 1] == ' ') data.erase(data.size() - 1, 1);
 
 		bool done = false;
 		for (int i = 0; i < 12; i++) {
