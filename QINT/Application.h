@@ -5,7 +5,7 @@ using namespace std;
 
 class Application {
 	private:
-		const string Operators[12]{"+", "-", "*" , "/", "&", "|", "^", "~", "rol", "ror", "<<", ">>"};
+		const string Operators[12]{"~", "+", "-", "*" , "/", "&", "|", "^", "rol", "ror", "<<", ">>"};
 		static Application* instance;
 
 		Application() {};

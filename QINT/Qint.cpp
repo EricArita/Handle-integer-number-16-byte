@@ -1,5 +1,6 @@
 #include "Qint.h"
 #include "Helper.h"
+#include "Task.h"
 
 void Qint::setBitOfArrBit(int* arrBit, int bitIndex) {
 	int arrIndex = bitIndex / 32;
@@ -15,6 +16,9 @@ void Qint::setBitOfArrBit(int* arrBit, int bitIndex) {
 	}
 
 	arrBit[arrIndex] = Bit::turnOnBit(arrBit[arrIndex], index);
+}
+
+Qint::Qint() {
 }
 
 Qint::Qint(string numberString, int base) {
@@ -69,6 +73,12 @@ Qint::Qint(string numberString, int base) {
 		string p = numberString;
 		string q = "";
 		int divisor = 2;
+		bool isPossitiveNumber = true;
+
+		if (p[0] == '-') {
+			isPossitiveNumber = false;
+			p.erase(0, 1);
+		}
 
 		while (p != "1")
 		{
@@ -93,6 +103,13 @@ Qint::Qint(string numberString, int base) {
 		}	
 
 		setBitOfArrBit(arrBit, bitIndex);
+
+		if (!isPossitiveNumber) {
+			Qint tmp;
+			tmp.setArrayBit(arrBit);
+			tmp = Task::Add(Task::Not(tmp), Qint("1", 2));
+			arrBit = tmp.getArrayBit();
+		}
 
 		return;
 	}
