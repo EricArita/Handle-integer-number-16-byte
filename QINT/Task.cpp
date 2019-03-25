@@ -192,6 +192,45 @@ Qint Task::Subtract(Qint numA, Qint numB) {
 	Status: Incomplete
 */
 Qint Task::Multiply(Qint numA, Qint numB) {
+	Qint tmp;
+	bool bit = 0;
+	int* arrBit = numA.getArrayBit();
+	int* tmpArr;
+	int a[4];
+
+	for (int i = 0; i < 4; i++)
+		a[i] = numB.getArrayBit()[i];
+
+	for (int i = 128; i > 0; i--) {		
+		if (Bit::getBit(arrBit[3], 0) == 0) {
+			if (bit == 1) {
+				tmp = Task::Add(tmp, numB);
+				for (int i = 0; i < 4; i++)
+					numB.getArrayBit()[i] = a[i];
+			}
+		}
+		else {
+			if (bit == 0) {
+				tmp = Task::Subtract(tmp, numB);
+				for (int i = 0; i < 4; i++)
+					numB.getArrayBit()[i] = a[i];
+			}
+		}
+
+
+		tmpArr = tmp.getArrayBit();
+
+		bit = Bit::getBit(arrBit[3], 0);
+		numA = Task::SHR(numA, 1);
+
+		bool k = Bit::getBit(tmpArr[3], 0);	
+		arrBit = numA.getArrayBit();
+		arrBit[0] = Bit::setBit(arrBit[0], 31, k);
+		numA.setArrayBit(arrBit);
+		
+		tmp = Task::SHR(tmp, 1);
+	}
+
 	return numA;
 }
 
@@ -308,7 +347,7 @@ Qint Task::SHR(Qint num, int k) {
 	}
 
 	if (highestBit == 1)
-		Bit::turnOnBit(arrBit[0], 31);
+		arrBit[0] = Bit::turnOnBit(arrBit[0], 31);
 
 	num.setArrayBit(arrBit);
 	return num;

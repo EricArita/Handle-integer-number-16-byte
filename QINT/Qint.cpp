@@ -19,6 +19,7 @@ void Qint::setBitOfArrBit(int* arrBit, int bitIndex) {
 }
 
 Qint::Qint() {
+	arrBit = new int[4]{ 0, 0, 0, 0 };
 }
 
 Qint::Qint(string numberString, int base) {
