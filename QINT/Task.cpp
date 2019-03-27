@@ -230,9 +230,55 @@ Qint Task::Multiply(Qint numA, Qint numB) {
 }
 
 /*
-	Status: Incomplete
+	Status: Complete
 */
 Qint Task::Divide(Qint numA, Qint numB) {
+	bool isPositive = true;
+	
+	if (Bit::getBit(numA.getArrayBit()[0], 31) == 1) {
+		isPositive = false;
+		numA = Task::Add(Task::Not(numA), Qint("1", 2));
+	}
+
+	if (Bit::getBit(numB.getArrayBit()[0], 31) == 1) {
+		isPositive = isPositive == true ? false : true;
+		numB = Task::Add(Task::Not(numB), Qint("1", 2));
+	}
+
+	Qint remainder;
+	bool bit = 0;
+	int storeRemainder[4];
+	int storeNumB[4];
+
+	for (int i = 128; i > 0; i--) {		
+		remainder = Task::SHL(remainder, 1);
+		bool k = Bit::getBit(numA.getArrayBit()[0], 31);
+		remainder.getArrayBit()[3] = Bit::setBit(remainder.getArrayBit()[3], 0, k);
+
+		for (int i = 0; i < 4; i++) {
+			storeRemainder[i] = remainder.getArrayBit()[i];
+			storeNumB[i] = numB.getArrayBit()[i];
+		}
+
+		numA = Task::SHL(numA, 1);
+	
+		remainder = Task::Subtract(remainder, numB);
+
+		for (int i = 0; i < 4; i++)
+			numB.getArrayBit()[i] = storeNumB[i];
+
+		if (Bit::getBit(remainder.getArrayBit()[0], 31) == 1) {
+			numA.getArrayBit()[3] = Bit::setBit(numA.getArrayBit()[3], 0, 0);
+			for (int i = 0; i < 4; i++)
+				remainder.getArrayBit()[i] = storeRemainder[i];
+		}
+		else
+			numA.getArrayBit()[3] = Bit::setBit(numA.getArrayBit()[3], 0, 1);
+	}
+
+	if (!isPositive) 
+		numA = Task::Add(Task::Not(numA), Qint("1", 2));
+
 	return numA;
 }
 
