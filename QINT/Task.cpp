@@ -29,7 +29,7 @@ void Task::Convert_Qint_to_Binary(Qint num, bool secondOffsetNumberMode) {
 	while (res[0] == '0') res.erase(0, 1);
 
 	if (res.empty())
-		cout << 0;
+		cout << 0 << endl;
 	else
 		cout << res << endl;
 }
@@ -75,6 +75,9 @@ void Task::Convert_Qint_to_Hexadecimal(Qint num) {
 	}
 
 	while (res[0] == '0') res.erase(0, 1);
+	if (res.empty())
+		res = "0";
+
 	cout << res << endl;
 }
 
@@ -82,6 +85,10 @@ void Task::Convert_Qint_to_Hexadecimal(Qint num) {
 	Status: Complete
 */
 void Task::Convert_Qint_to_Decimal(Qint num) {
+	/*
+		This method uses 'Binary to BCD Conversion algorithm' to convert binary to decimal
+	*/
+
 	int* arrBit = num.getArrayBit();
 	bool bit = Bit::getBit(arrBit[0], 31);
 
@@ -192,6 +199,10 @@ Qint Task::Subtract(Qint numA, Qint numB) {
 	Status: Complete
 */
 Qint Task::Multiply(Qint numA, Qint numB) {
+	/*
+		This method uses Booth's Algorithm to multiply 2 binary numbers
+	*/
+
 	Qint tmp;
 	bool bit = 0;
 	int storeNumB[4];

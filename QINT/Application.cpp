@@ -116,6 +116,21 @@ void Application::Start(const char* inputFile, const char* outputFile) {
 						Processing_Convert(res, currBase, false);
 					}
 					else {
+						if (Operators[i] == "-" ) {
+							if (found == 0) {
+								for (int j = 1; j < data.size(); j++) {
+									if (data[j] == '-') {
+										found = j;
+										break;
+									}
+								}
+							}
+							else {
+								if (data[found - 1] != ' ' || data[found + 1] != ' ') 
+									break;					
+							}
+						}
+
 						Qint numA(data.substr(0, found - 1), currBase);
 						Qint numB(data.substr(found + 2, data.size() - found - 2), currBase);
 						Qint res = Processing_Calculate(numA, numB, Operators[i]);
@@ -132,7 +147,7 @@ void Application::Start(const char* inputFile, const char* outputFile) {
 						
 		if (data[0] == '2') {
 			Qint num(data.substr(2, data.size() - 2), currBase);
-			Processing_Convert(num, 2, true);
+			Processing_Convert(num, 2, false);
 		}
 		else {
 			if (data[1] == '6') {

@@ -11,6 +11,7 @@ class Task {
 		static void Convert_Qint_to_Decimal(Qint num);
 
 		static void Convert_Qint_to_Hexadecimal(Qint num);
+		
 		//
 		//Return result of (numA + numB) operations
 		//
