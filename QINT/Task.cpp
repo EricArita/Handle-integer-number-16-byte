@@ -398,8 +398,22 @@ Qint Task::SHR(Qint num, int k) {
 		}
 	}
 
-	if (highestBit == 1)
-		arrBit[0] = Bit::turnOnBit(arrBit[0], 31);
+	if (highestBit == 1) {
+		int i = 0;
+		int j = 31;
+		while (k != 0)
+		{
+			if (j < 0) {
+				j = 31;
+				i++;
+			}
+
+			arrBit[i] = Bit::setBit(arrBit[i], j, 1);
+			
+			j--;
+			k--;
+		}
+	}
 
 	num.setArrayBit(arrBit);
 	return num;

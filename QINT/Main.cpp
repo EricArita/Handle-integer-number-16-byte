@@ -7,11 +7,11 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-	const char* inputFile = argv[1];
-	const char* outputFile = argv[2];
+	//const char* inputFile = argv[1];
+	//const char* outputFile = argv[2];
 
-	//const char* inputFile = "input.txt";
-	//const char* outputFile = "output.txt";
+	const char* inputFile = "input.txt";
+	const char* outputFile = "output.txt";
 
 	Application::getInstance()->Start(inputFile, outputFile);
 }
